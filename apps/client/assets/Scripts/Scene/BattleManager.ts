@@ -3,10 +3,12 @@ import DataManager from '../Global/DataManager';
 import { JoytStickManager } from '../../UI/JoytStickManager';
 import { ResourceManager } from '../Global/ResourceManager';
 import { ActorManager } from '../Entity/Actor/ActorManager';
-import { PrefabPathEnum, TexturebPathEnum } from '../Enum';
-import { EntityTypeEnum, InputTypeEnum } from '../Common';
+import { EventEnum, PrefabPathEnum, TexturebPathEnum } from '../Enum';
+import { ApiMsgEnum, EntityTypeEnum, IClienInput, InputTypeEnum } from '../Common';
 import { BulletManager } from '../Entity/Bullet/BulletManager';
 import { ObjectPoolManager } from '../Global/ObjectPoolManager';
+import { NetworkManager } from '../Global/NetworkManager';
+import EventManager from '../Global/EventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
@@ -15,15 +17,27 @@ export class BattleManager extends Component {
     private ui: Node;
 
     private shoudUpdate: boolean = false;
-    onLoad() {
-        this.stage = DataManager.Instance.stage = this.node.getChildByName('Stage');
-        this.ui = this.node.getChildByName('UI');
-        DataManager.Instance.jm = this.ui.getComponentInChildren(JoytStickManager);
-    }
+    onLoad() { }
 
     async start() {
+        this.clearGame();
         await this.loadRes();
+        this.initGame();
+    }
+
+    initGame() {
+        DataManager.Instance.jm = this.ui.getComponentInChildren(JoytStickManager);
         this.shoudUpdate = true;
+        EventManager.Instance.on(EventEnum.ClientSync, this.handleClientSync, this);
+        NetworkManager.Instance.listenMsg(ApiMsgEnum.MsgServerSync, this.handleServerSync, this);
+    }
+
+    clearGame() {
+        this.stage = DataManager.Instance.stage = this.node.getChildByName('Stage');
+        this.ui = this.node.getChildByName('UI');
+        EventManager.Instance.off(EventEnum.ClientSync, this.handleClientSync, this);
+        NetworkManager.Instance.unlistenMsg(ApiMsgEnum.MsgServerSync, this.handleServerSync, this);
+
     }
 
     async loadRes() {
@@ -100,6 +114,20 @@ export class BattleManager extends Component {
             } else {
                 bm.render(data);
             }
+        }
+    }
+
+    handleClientSync(input: IClienInput) {
+        const msg = {
+            input,
+            frameId: DataManager.Instance.frameId++
+        }
+        NetworkManager.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
+    }
+
+    handleServerSync({ inputs }: any) {
+        for (let input of inputs) {
+            DataManager.Instance.applyInput(input);
         }
     }
 }

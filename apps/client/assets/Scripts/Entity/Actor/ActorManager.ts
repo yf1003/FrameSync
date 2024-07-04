@@ -3,9 +3,10 @@ import DataManager from '../../Global/DataManager';
 import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
 import { EntityManager } from '../../Base/EntityManager';
 import { ActorStateMachine } from './ActorStateMachine';
-import { EntityStateEnum } from '../../Enum';
+import { EntityStateEnum, EventEnum } from '../../Enum';
 import { WeaponManager } from '../Weapon/WeaponManager';
 import { radToAngle } from '../../Utils';
+import EventManager from '../../Global/EventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ActorManager')
@@ -36,15 +37,16 @@ export class ActorManager extends EntityManager {
         if (this.id !== DataManager.Instance.myPlayerId) return;
 
         if (DataManager.Instance.jm.input.length() > 0) {
+
             const { x, y } = DataManager.Instance.jm.input;
-            DataManager.Instance.applyInput({
+            EventManager.Instance.emit(EventEnum.ClientSync, {
                 id: DataManager.Instance.myPlayerId,
                 type: InputTypeEnum.ActorMove,
                 direction: {
                     x, y
                 },
                 dt,
-            });
+            })
 
             this.state = EntityStateEnum.Run;
         } else {
@@ -68,7 +70,7 @@ export class ActorManager extends EntityManager {
         this.wm.node.setRotationFromEuler(0, 0, angle);
 
         this.hp.progress = data.hp / 100;
-        
+
     }
 }
 

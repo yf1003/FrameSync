@@ -13,6 +13,7 @@ export enum EventEnum {
   WenponShoot = 'WenponShoot',
   ExplosionBorn = 'ExplosionBorn',
   BulletBorn = 'BulletBorn',
+  ClientSync = 'ClientSync',
 }
 
 export enum PrefabPathEnum {
@@ -38,4 +39,9 @@ export enum EntityStateEnum {
   Idle = "Idle",
   Run = "Run",
   Attack = "Attack",
+}
+
+export enum SceneEnum {
+  Login = 'Login',
+  Battle = 'Battle',
 }

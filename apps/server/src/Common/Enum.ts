@@ -12,3 +12,9 @@ export enum EntityTypeEnum {
     Bullet2 = 'Bullet2',
     Explosion = 'Explosion',
 }
+
+export enum ApiMsgEnum {
+    ApiPlayerJoin = 'ApiPlayerJoin',
+    MsgClientSync = 'MsgClientSync',
+    MsgServerSync = 'MsgServerSync',
+}
