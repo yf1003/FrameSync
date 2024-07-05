@@ -15,6 +15,7 @@ export class PlayerManager extends Singleton {
         const player = new Player({ id: this.nextPlayerId++, nickname, connection });
         this.players.add(player);
         this.idMapPlayer.set(player.id, player);
+
         return player;
     }
 

@@ -1,14 +1,15 @@
 import { _decorator, resources, Asset, Node, instantiate, error } from "cc";
 import Singleton from "../Base/Singleton";
+import { IModel } from "../Common";
 
 interface IItem {
     cb: Function;
     ctx: unknown;
 }
 
-interface ICallApiReturn {
+interface ICallApiReturn<T> {
     success: boolean,
-    res?: any;
+    res?: T;
     error?: Error;
 }
 
@@ -18,7 +19,7 @@ export class NetworkManager extends Singleton {
     }
 
     private map: Map<string, Array<IItem>> = new Map();
-    private port: number = 9877;
+    private port: number = 9876;
     private ws: WebSocket;
     isConnected: boolean = false;
 
@@ -58,7 +59,7 @@ export class NetworkManager extends Singleton {
         });
     }
 
-    async callApi(name: string, data): Promise<ICallApiReturn> {
+    async callApi<T extends keyof IModel['api']>(name: T, data: IModel['api'][T]['req']): Promise<ICallApiReturn<IModel['api'][T]['res']>> {
         return new Promise((resolve) => {
             try {
                 const timer = setTimeout(() => {

@@ -34,7 +34,7 @@ export class LoginManager extends Component {
             console.log(error);
             return;
         }
-          
+
         DataManager.Instance.myPlayerId = res.player.id;
 
         director.loadScene(SceneEnum.Battle);

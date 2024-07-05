@@ -19,7 +19,8 @@ server.start().then(() => { console.log('服务启动！') });
 server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
     const { nickname } = data;
     const player = PlayerManager.Instance.createPlayer(nickname, connection);
-    connection.playerId = player.id;
+    connection.playerId = player.id; 
+    
     return {
         player: PlayerManager.Instance.getPlayerView(player)
     }
