@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { Connection } from "./Connection";
-import { ApiMsgEnum } from "../Common";
+import { ApiMsgEnum, IModel } from "../Common";
 import { EventEmitter } from "stream";
 
 export class MyServer extends EventEmitter {
@@ -16,7 +16,7 @@ export class MyServer extends EventEmitter {
 
     async start() {
         return new Promise((resolve, reject) => {
-            this.wss = new WebSocketServer({ port: 9876 }); 
+            this.wss = new WebSocketServer({ port: 9876 });
             this.wss.on('listening', () => {
                 resolve(true);
             });
@@ -40,7 +40,7 @@ export class MyServer extends EventEmitter {
         });
     }
 
-    setApi(name: ApiMsgEnum, cb: Function) {
+    setApi<T extends keyof IModel['api']>(name: T, cb: (connection: Connection,args: IModel['api'][T]['req']) => void) {
         this.apiMap.set(name, cb);
     }
 }

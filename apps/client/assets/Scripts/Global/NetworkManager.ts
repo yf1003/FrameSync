@@ -79,14 +79,14 @@ export class NetworkManager extends Singleton {
         });
     }
 
-    sendMsg(name: string, data) {
+    sendMsg<T extends keyof IModel['msg']>(name: T, data: IModel['msg'][T]) {
         const msg = {
             name, data
         }
         this.ws.send(JSON.stringify(msg));
     }
 
-    listenMsg(name: string, cb: Function, ctx?: unknown) {
+    listenMsg<T extends keyof IModel['msg']>(name: T, cb: (args: IModel['msg'][T]) => void, ctx?: unknown) {
         if (this.map.has(name)) {
             this.map.get(name).push({ cb, ctx });
         } else {
@@ -94,7 +94,7 @@ export class NetworkManager extends Singleton {
         }
     }
 
-    unlistenMsg(name: string, cb: Function, ctx?: unknown) {
+    unlistenMsg<T extends keyof IModel['msg']>(name: T, cb: (args: IModel['msg'][T]) => void, ctx?: unknown) {
         if (this.map.has(name)) {
             const index = this.map.get(name).findIndex((i) => cb === i.cb && i.ctx === ctx);
             index > -1 && this.map.get(name).splice(index, 1);

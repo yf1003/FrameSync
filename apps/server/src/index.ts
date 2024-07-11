@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import { symlinkCommon } from "./Utils";
-import { ApiMsgEnum } from "./Common";
+import { ApiMsgEnum, IApiPlayerJoinReq } from "./Common";
 import { Connection, MyServer } from "./Core";
 import { PlayerManager } from "./Biz/PlayerManager";
 
@@ -16,11 +16,11 @@ declare module "./Core" {
 const server = new MyServer({ port: 9877 });
 server.start().then(() => { console.log('服务启动！') });
 
-server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
+server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: IApiPlayerJoinReq) => {
     const { nickname } = data;
-    const player = PlayerManager.Instance.createPlayer(nickname, connection);
-    connection.playerId = player.id; 
-    
+    const player = PlayerManager.Instance.createPlayer({ nickname, connection });
+    connection.playerId = player.id;
+
     return {
         player: PlayerManager.Instance.getPlayerView(player)
     }

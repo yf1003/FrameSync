@@ -9,6 +9,7 @@ import { BulletManager } from '../Entity/Bullet/BulletManager';
 import { ObjectPoolManager } from '../Global/ObjectPoolManager';
 import { NetworkManager } from '../Global/NetworkManager';
 import EventManager from '../Global/EventManager';
+import { IMsgServerSync } from '../Common/Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
@@ -37,7 +38,6 @@ export class BattleManager extends Component {
         this.ui = this.node.getChildByName('UI');
         EventManager.Instance.off(EventEnum.ClientSync, this.handleClientSync, this);
         NetworkManager.Instance.unlistenMsg(ApiMsgEnum.MsgServerSync, this.handleServerSync, this);
-
     }
 
     async loadRes() {
@@ -125,7 +125,7 @@ export class BattleManager extends Component {
         NetworkManager.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
     }
 
-    handleServerSync({ inputs }: any) {
+    handleServerSync({ inputs, lastFrameId }: IMsgServerSync) {
         for (let input of inputs) {
             DataManager.Instance.applyInput(input);
         }
