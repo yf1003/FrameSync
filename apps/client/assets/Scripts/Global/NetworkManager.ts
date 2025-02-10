@@ -19,7 +19,7 @@ export class NetworkManager extends Singleton {
     }
 
     private map: Map<string, Array<IItem>> = new Map();
-    private port: number = 9876;
+    private port: number = 9877;
     private ws: WebSocket;
     isConnected: boolean = false;
 

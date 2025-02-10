@@ -4,7 +4,7 @@ import { ApiMsgEnum, IApiPlayerJoinReq } from "./Common";
 import { Connection, MyServer } from "./Core";
 import { PlayerManager } from "./Biz/PlayerManager";
 
-// symlinkCommon();
+symlinkCommon();
 
 declare module "./Core" {
     interface Connection {

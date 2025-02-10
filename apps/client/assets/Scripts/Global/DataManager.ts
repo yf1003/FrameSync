@@ -21,6 +21,7 @@ const BULLET_RADIUS = 10;
 
 const BULLET_DAMAGE = 10;
 
+/** 管理游戏实体物件（角色节点，子弹节点，通用预制，通用图片） */
 export default class DataManager extends Singleton {
   static get Instance() {
     return super.GetInstance<DataManager>();

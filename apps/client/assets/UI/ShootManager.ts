@@ -8,7 +8,7 @@ const { ccclass, property } = _decorator;
 export class ShootManager extends Component {
 
     private handlerShoot() {
-        EventManager.Instance.emit(EventEnum.WenponShoot)
+        EventManager.Instance.emit(EventEnum.WenponShoot);
     }
 }
 

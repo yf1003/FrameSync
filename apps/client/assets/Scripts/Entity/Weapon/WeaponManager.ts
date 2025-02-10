@@ -25,13 +25,13 @@ export class WeaponManager extends EntityManager {
 
         this.state = EntityStateEnum.Idle;
 
-        EventManager.Instance.on(EventEnum.WenponShoot, this.handlerWeaponShoot, this);
         EventManager.Instance.on(EventEnum.BulletBorn, this.handlerBulletBorn, this);
+        EventManager.Instance.on(EventEnum.WenponShoot, this.handlerWeaponShoot, this);
     }
 
     onDestroy() {
-        EventManager.Instance.off(EventEnum.WenponShoot, this.handlerWeaponShoot, this);
         EventManager.Instance.off(EventEnum.BulletBorn, this.handlerBulletBorn, this);
+        EventManager.Instance.off(EventEnum.WenponShoot, this.handlerWeaponShoot, this);
     }
 
     handlerBulletBorn(owner: number) {

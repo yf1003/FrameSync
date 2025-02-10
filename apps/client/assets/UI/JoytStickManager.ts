@@ -5,11 +5,11 @@ const { ccclass, property } = _decorator;
 @ccclass('JoytStickManager')
 export class JoytStickManager extends Component {
     public input: cc.Vec3;
-    private body: cc.Node;
-    private stick: cc.Node;
+    private body: cc.Node;        
+    private stick: cc.Node;  
 
     private defaultPosition: cc.Vec3;
-    private radius: number = 0;
+    private radius: number = 0;  
 
     onLoad() {
         this.input = new cc.Vec3();
@@ -34,7 +34,7 @@ export class JoytStickManager extends Component {
     }
 
     private onTouchMove(event: cc.EventTouch) {
-        const touchPos = event.getUILocation();
+        const touchPos = event.getUILocation();  
         const stickPos = new cc.Vec3(touchPos.x - this.body.worldPosition.x, touchPos.y - this.body.worldPosition.y);
         if (stickPos.length() > this.radius) {
             stickPos.multiplyScalar(this.radius / stickPos.length());
